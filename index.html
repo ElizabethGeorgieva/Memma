@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="./image-slot.js"></script>
+<style>
+  body{margin:0;background:oklch(94% 0.015 300);font-family:Inter,system-ui,sans-serif}
+  @keyframes mm-pulse{0%,100%{opacity:.35}50%{opacity:1}}
+  @keyframes mm-bar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+  ::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:48px 20px 80px;min-height:100vh;box-sizing:border-box">
+
+  <div style="text-align:center">
+    <div style="font-family:Georgia,serif;font-size:15px;letter-spacing:.06em;color:oklch(30% 0.02 300);text-transform:uppercase">Memma — prototype</div>
+    <div style="font-size:12px;color:oklch(45% 0.015 300);margin-top:4px">Tap through the phone below. Use the strip to jump to any screen.</div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:460px">
+    <button style="{{ jumpBtnStyleOnboarding }}" onclick="{{ jumpOnboarding }}">Onboarding</button>
+    <button style="{{ jumpBtnStyleHome }}" onclick="{{ jumpHome }}">Home</button>
+    <button style="{{ jumpBtnStyleDiary }}" onclick="{{ jumpDiary }}">Diary</button>
+    <button style="{{ jumpBtnStyleCapture }}" onclick="{{ jumpCapture }}">Capture</button>
+    <button style="{{ jumpBtnStyleTemplates }}" onclick="{{ jumpTemplates }}">Templates</button>
+    <button style="{{ jumpBtnStyleFamilyTree }}" onclick="{{ jumpFamilyTree }}">Family Tree</button>
+    <button style="{{ jumpBtnStyleSharedSpace }}" onclick="{{ jumpSharedSpace }}">Shared Space</button>
+    <button style="{{ jumpBtnStyleBook }}" onclick="{{ jumpBook }}">Memory Book</button>
+    <button style="{{ jumpBtnStyleProfile }}" onclick="{{ jumpProfile }}">Profile</button>
+  </div>
+
+  <div style="transform:scale(0.82);transform-origin:top center;margin-bottom:-150px">
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="390px,844px">
+    <div style="width:100%;height:100%;position:relative;overflow:hidden;background:oklch(98.5% 0.004 70);display:flex;flex-direction:column">
+
+      <!-- ===================== ONBOARDING ===================== -->
+      <sc-if value="{{ showOnboarding }}">
+        <div style="flex:1;display:flex;flex-direction:column;padding:22px 22px 26px;box-sizing:border-box" onTouchStart="{{ obTouchStart }}" onTouchEnd="{{ obTouchEnd }}">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+            <sc-if value="{{ obStepGt0 }}">
+              <div onclick="{{ obBack }}" style="width:32px;height:32px;border-radius:10px;background:oklch(94% 0.006 60);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:oklch(30% 0.006 60);flex:none">‹</div>
+            </sc-if>
+            <div style="display:flex;gap:6px;flex:1">
+              <sc-for list="{{ obDots }}" as="d" hint-placeholder-count="4">
+                <div style="{{ d.style }}"></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{ obStep0 }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px">
+              <div style="width:72px;height:72px;position:relative">
+                <div style="position:absolute;left:-6px;top:2px;width:20px;height:20px;border-radius:50%;background:oklch(76% 0.14 350)"></div>
+                <div style="position:absolute;right:-8px;top:8px;width:16px;height:16px;border-radius:50%;background:oklch(78% 0.13 230)"></div>
+                <div style="position:absolute;left:6px;bottom:-8px;width:18px;height:18px;border-radius:50%;background:oklch(82% 0.14 90)"></div>
+                <div style="position:absolute;right:0;bottom:-4px;width:14px;height:14px;border-radius:50%;background:oklch(76% 0.1 40)"></div>
+                <div style="position:absolute;inset:8px;border-radius:20px;background:oklch(24% 0.02 300);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px oklch(0% 0 0 / 0.18)">
+                  <span style="font-family:Georgia,serif;font-weight:700;font-size:26px;color:white">m</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-family:Georgia,serif;font-size:34px;color:oklch(20% 0.006 60)">Memma</div>
+                <div style="font-size:14.5px;color:oklch(45% 0.006 60);margin-top:8px;max-width:260px;line-height:1.5">Catch the moments before they fade.</div>
+              </div>
+            </div>
+            <button style="width:100%;padding:16px;border:none;border-radius:14px;background:oklch(58% 0.16 300);color:white;font-size:16px;font-weight:600;cursor:pointer" onclick="{{ obNext }}">Get started</button>
+            <div style="text-align:center;margin-top:14px;font-size:13.5px;color:oklch(45% 0.006 60)">I already have an account</div>
+          </sc-if>
+
+          <sc-if value="{{ obStep1 }}">
+            <div style="font-family:Georgia,serif;font-size:23px;color:oklch(20% 0.006 60);margin-bottom:6px">Your profile</div>
+            <div style="font-size:13.5px;color:oklch(48% 0.006 60);margin-bottom:24px">So the family knows whose voice is logging.</div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;gap:14px">
+                <image-slot id="parent-avatar" shape="circle" placeholder="photo" style="width:76px;height:76px;flex:none"></image-slot>
+                <div style="font-size:12px;color:oklch(50% 0.006 60)">Tap to drop a photo, or skip for now</div>
+              </div>
+              <input placeholder="Your name" value="{{ parentName }}" onchange="{{ setParentName }}" style="{{ inputStyle }}">
+              <input placeholder="Your role — mom, dad, guardian…" value="{{ parentRole }}" onchange="{{ setParentRole }}" style="{{ inputStyle }}">
+            </div>
+            <div style="flex:1"></div>
+            <button style="{{ primaryBtn }}" onclick="{{ obNext }}">Continue</button>
+          </sc-if>
+
+          <sc-if value="{{ obStep2 }}">
+            <div style="font-family:Georgia,serif;font-size:23px;color:oklch(20% 0.006 60);margin-bottom:6px">Add your child</div>
+            <div style="font-size:13.5px;color:oklch(48% 0.006 60);margin-bottom:20px">Ema gets her own diary — this is where every memory lives.</div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;gap:14px">
+                <image-slot id="child-avatar" shape="circle" placeholder="photo" style="width:76px;height:76px;flex:none"></image-slot>
+                <div style="font-size:12px;color:oklch(50% 0.006 60)">Tap to drop a photo, or skip for now</div>
+              </div>
+              <input placeholder="Child's name" value="{{ childName }}" onchange="{{ setChildName }}" style="{{ inputStyle }}">
+              <div>
+                <div style="font-size:12.5px;color:oklch(48% 0.006 60);margin-bottom:6px">Date of birth</div>
+                <input type="date" value="{{ childDob }}" onchange="{{ setChildDob }}" style="{{ inputStyle }}color-scheme:light;">
+              </div>
+              <div>
+                <div style="font-size:12.5px;color:oklch(48% 0.006 60);margin-bottom:8px">Diary color</div>
+                <div style="display:flex;gap:10px">
+                  <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="4">
+                    <div onclick="{{ s.select }}" style="{{ s.style }}">
+                      <sc-if value="{{ s.selected }}"><div style="color:white;font-size:14px;font-weight:700">✓</div></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1"></div>
+            <button style="{{ primaryBtn }}" onclick="{{ obNext }}">Continue</button>
+          </sc-if>
+
+          <sc-if value="{{ obStep3 }}">
+            <div style="font-family:Georgia,serif;font-size:23px;color:oklch(20% 0.006 60);margin-bottom:6px">One more thing</div>
+            <div style="font-size:13.5px;color:oklch(48% 0.006 60);margin-bottom:20px">Dictation understands your family automatically — no setup needed.</div>
+            <div style="{{ cardStyle }}">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:oklch(20% 0.006 60)">Auto-detect language</div>
+                  <div style="font-size:12px;color:oklch(50% 0.006 60);margin-top:2px">Bulgarian, English &amp; 40+ others — detected per recording</div>
+                </div>
+                <div onclick="{{ toggleAutoDetect }}" style="{{ autoDetectToggleStyle }}"><div style="{{ autoDetectKnobStyle }}"></div></div>
+              </div>
+            </div>
+            <div style="{{ cardStyle }}margin-top:10px">
+              <div style="font-size:14px;font-weight:600;color:oklch(20% 0.006 60)">Your data stays private</div>
+              <div style="font-size:12px;color:oklch(50% 0.006 60);margin-top:4px;line-height:1.5">Only people you invite ever see your family's memories. We never use footage to train AI models. <span onclick="{{ openPromise }}" style="color:oklch(50% 0.15 300);text-decoration:underline;cursor:pointer">Read our promise</span></div>
+            </div>
+            <div style="flex:1"></div>
+            <button style="{{ primaryBtn }}" onclick="{{ obFinish }}">Start capturing memories</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===================== TOP-LEVEL APP ===================== -->
+      <sc-if value="{{ showApp }}">
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative">
+
+          <sc-if value="{{ savedToast }}">
+            <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);background:oklch(24% 0.02 300);color:white;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;z-index:30;box-shadow:0 6px 16px rgba(0,0,0,.2)">Saved</div>
+          </sc-if>
+
+          <!-- Sub-screen with back nav -->
+          <sc-if value="{{ showSub }}">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px 18px 10px;flex:none">
+              <div onclick="{{ back }}" style="width:32px;height:32px;border-radius:10px;background:oklch(94% 0.006 60);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:oklch(30% 0.006 60)">‹</div>
+              <div style="font-size:16px;font-weight:700;color:oklch(20% 0.006 60)">{{ subTitle }}</div>
+            </div>
+          </sc-if>
+
+          <div style="flex:1;overflow-y:auto">
+
+            <!-- HOME -->
+            <sc-if value="{{ showHome }}">
+              <div style="padding:18px 18px 24px">
+                <div style="margin-bottom:18px">
+                  <div style="font-size:13px;color:oklch(50% 0.006 60)">Good evening, {{ greetingName }}</div>
+                  <div style="font-family:Georgia,serif;font-size:22px;color:oklch(20% 0.006 60);margin-top:2px">{{ activeChild.name }}'s diary</div>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-bottom:20px">
+                  <div onclick="{{ startCapture }}" style="flex:1;background:oklch(58% 0.16 300);border-radius:16px;padding:16px;color:white;cursor:pointer">
+                    <div style="width:30px;height:30px;border-radius:50%;background:white;margin-bottom:8px;display:flex;align-items:center;justify-content:center"><div style="width:12px;height:12px;border-radius:50%;background:oklch(58% 0.16 300)"></div></div>
+                    <div style="font-size:13.5px;font-weight:600">Record &amp; narrate</div>
+                  </div>
+                  <div onclick="{{ jumpTemplates }}" style="flex:1;background:oklch(96% 0.005 60);border-radius:16px;padding:16px;color:oklch(25% 0.006 60);cursor:pointer">
+                    <div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;margin-bottom:10px"><div style="width:13px;height:13px;background:oklch(50% 0.15 300);transform:rotate(45deg);border-radius:2px"></div></div>
+                    <div style="font-size:13.5px;font-weight:600">Log a milestone</div>
+                  </div>
+                </div>
+
+                <div style="{{ promptCardStyle }}">
+                  <div style="font-size:12px;color:oklch(50% 0.15 300);font-weight:600;letter-spacing:.03em;text-transform:uppercase">Suggested today</div>
+                  <div style="font-size:14.5px;color:oklch(22% 0.006 60);margin-top:4px;font-weight:600">Did {{ activeChild.name }} say a new word this week?</div>
+                  <div style="font-size:12.5px;color:oklch(50% 0.006 60);margin-top:2px">Tap to capture it before it fades.</div>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 10px">
+                  <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60)">Recent memories</div>
+                  <div onclick="{{ jumpDiary }}" style="font-size:12.5px;color:oklch(50% 0.15 300);cursor:pointer">See diary</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ recentMemories }}" as="m" hint-placeholder-count="3">
+                    <div onclick="{{ m.open }}" style="{{ cardRowStyle }}">
+                      <div style="{{ m.thumbStyle }}">
+                        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><div style="width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent white;margin-left:1px"></div></div>
+                        <div style="position:absolute;bottom:2px;right:3px;font-size:8.5px;color:white;text-shadow:0 1px 2px rgba(0,0,0,.4)">{{ m.duration }}</div>
+                      </div>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:13.5px;font-weight:600;color:oklch(22% 0.006 60)">{{ m.tag }}</div>
+                        <div style="font-size:12.5px;color:oklch(52% 0.006 60);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.excerpt }}</div>
+                      </div>
+                      <div style="font-size:11px;color:oklch(60% 0.006 60);flex:none">{{ m.dateLabel }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60);margin:22px 0 10px">Explore</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                  <div onclick="{{ jumpFamilyTree }}" style="{{ exploreTileStyle }}"><div style="{{ exploreIconBadge1 }}"><div style="display:flex;gap:2px;align-items:center"><div style="width:6px;height:6px;border-radius:50%;background:oklch(76% 0.14 350)"></div><div style="width:6px;height:6px;border-radius:50%;background:oklch(76% 0.14 350);opacity:.55"></div><div style="width:6px;height:6px;border-radius:50%;background:oklch(76% 0.14 350);opacity:.3"></div></div></div><div style="font-size:12.5px;font-weight:600;margin-top:8px">Family tree</div></div>
+                  <div onclick="{{ jumpSharedSpace }}" style="{{ exploreTileStyle }}"><div style="{{ exploreIconBadge2 }}"><div style="width:26px;height:20px;position:relative"><div style="position:absolute;left:0;top:2px;width:15px;height:15px;border-radius:50%;background:oklch(78% 0.13 230 / 0.85)"></div><div style="position:absolute;right:0;top:5px;width:11px;height:11px;border-radius:50%;background:oklch(76% 0.1 40 / 0.85)"></div></div></div><div style="font-size:12.5px;font-weight:600;margin-top:8px">Shared space</div></div>
+                  <div onclick="{{ jumpBook }}" style="{{ exploreTileStyle }}"><div style="{{ exploreIconBadge3 }}"><div style="display:flex;gap:2px"><div style="width:9px;height:16px;border-radius:2px 1px 1px 2px;background:oklch(82% 0.14 90)"></div><div style="width:9px;height:16px;border-radius:1px 2px 2px 1px;background:oklch(82% 0.14 90);opacity:.6"></div></div></div><div style="font-size:12.5px;font-weight:600;margin-top:8px">Memory book</div></div>
+                  <div onclick="{{ jumpTemplates }}" style="{{ exploreTileStyle }}"><div style="{{ exploreIconBadge4 }}"><div style="width:13px;height:13px;background:oklch(76% 0.1 40);transform:rotate(45deg);border-radius:2px"></div></div><div style="font-size:12.5px;font-weight:600;margin-top:8px">Templates</div></div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- DIARY -->
+            <sc-if value="{{ showDiary }}">
+              <div style="padding:18px 18px 24px">
+                <div style="font-family:Georgia,serif;font-size:22px;color:oklch(20% 0.006 60);margin-bottom:14px">Diary</div>
+                <div style="display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:2px">
+                  <sc-for list="{{ diaryFilters }}" as="f" hint-placeholder-count="4">
+                    <div onclick="{{ f.select }}" style="{{ f.style }}">{{ f.label }}</div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ diaryEmpty }}">
+                  <div style="text-align:center;padding:40px 20px;color:oklch(55% 0.006 60);font-size:13px">No memories in this filter yet.</div>
+                </sc-if>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ allMemories }}" as="m" hint-placeholder-count="6">
+                    <div onclick="{{ m.open }}" style="{{ cardRowStyle }}">
+                      <div style="{{ m.thumbStyle }}">
+                        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><div style="width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent white;margin-left:1px"></div></div>
+                        <div style="position:absolute;bottom:2px;right:3px;font-size:8.5px;color:white;text-shadow:0 1px 2px rgba(0,0,0,.4)">{{ m.duration }}</div>
+                      </div>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:13.5px;font-weight:600;color:oklch(22% 0.006 60)">{{ m.tag }}</div>
+                        <div style="font-size:12.5px;color:oklch(52% 0.006 60);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.excerpt }}</div>
+                      </div>
+                      <div style="font-size:11px;color:oklch(60% 0.006 60);flex:none">{{ m.dateLabel }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- ENTRY DETAIL -->
+            <sc-if value="{{ showEntryDetail }}">
+              <div style="padding:0 18px 24px">
+                <div style="{{ entryHeroStyle }}">
+                  <div style="width:52px;height:52px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.12)"><div style="width:0;height:0;border-style:solid;border-width:9px 0 9px 14px;border-color:transparent transparent transparent oklch(58% 0.16 300);margin-left:2px"></div></div>
+                  <div style="position:absolute;bottom:10px;right:12px;font-size:11px;color:white;background:rgba(0,0,0,.35);padding:3px 8px;border-radius:10px">{{ entryMediaLabel }}</div>
+                </div>
+                <div style="display:flex;gap:8px;margin:14px 0">
+                  <div style="{{ tagChipStyle }}">{{ selectedEntry.tag }}</div>
+                  <div style="{{ tagChipStyle }}">{{ selectedEntry.dateLabel }}</div>
+                </div>
+                <div style="font-size:11.5px;color:oklch(50% 0.15 300);font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin-bottom:6px">Transcript</div>
+                <sc-if value="{{ entryEditingTranscript }}">
+                  <textarea value="{{ entryEditText }}" onchange="{{ setEntryEditText }}" style="width:100%;box-sizing:border-box;min-height:120px;padding:12px;border:1px solid oklch(88% 0.006 60);border-radius:12px;font-size:15px;line-height:1.6;color:oklch(24% 0.006 60);font-family:Georgia,serif;resize:none"></textarea>
+                  <div style="display:flex;gap:10px;margin-top:10px">
+                    <button style="{{ secondaryBtnSmall }}" onclick="{{ cancelEditTranscript }}">Cancel</button>
+                    <button style="{{ primaryBtnSmall }}" onclick="{{ saveEditTranscript }}">Save</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ entryEditingTranscript }}" hint-placeholder-val="{{ false }}"></sc-if>
+                <sc-if value="{{ showEntryDetail }}">
+                  <sc-if value="{{ entryNotEditing }}">
+                    <div style="font-size:15px;line-height:1.6;color:oklch(24% 0.006 60);font-family:Georgia,serif">{{ selectedEntry.fullTranscript }}</div>
+                    <div style="display:flex;gap:10px;margin-top:20px">
+                      <button style="{{ secondaryBtnSmall }}" onclick="{{ startEditTranscript }}">Edit transcript</button>
+                      <button style="{{ secondaryBtnSmall }}" onclick="{{ showAddPhoto }}">Add photo</button>
+                    </div>
+                  </sc-if>
+                </sc-if>
+                <sc-if value="{{ entryShowPhoto }}">
+                  <image-slot id="{{ entryPhotoId }}" shape="rounded" radius="12" placeholder="photo" style="width:100%;height:140px;margin-top:12px"></image-slot>
+                </sc-if>
+                <div style="margin-top:20px;padding-top:16px;border-top:1px solid oklch(90% 0.006 60)">
+                  <div style="font-size:13px;font-weight:700;color:oklch(20% 0.006 60);margin-bottom:10px">Shared with family</div>
+                  <sc-for list="{{ selectedEntry.comments }}" as="cm" hint-placeholder-count="1">
+                    <div style="display:flex;gap:8px;margin-bottom:10px">
+                      <div style="width:26px;height:26px;border-radius:50%;background:oklch(78% 0.10 300);color:white;font-size:11px;display:flex;align-items:center;justify-content:center;flex:none">{{ cm.initial }}</div>
+                      <div style="font-size:12.5px;color:oklch(35% 0.006 60);line-height:1.4"><b>{{ cm.name }}</b> {{ cm.text }}</div>
+                    </div>
+                  </sc-for>
+                  <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+                    <input placeholder="Add a comment…" value="{{ newCommentText }}" onchange="{{ setNewComment }}" onkeydown="{{ onCommentKeydown }}" style="flex:1;border:1px solid oklch(90% 0.006 60);border-radius:10px;padding:9px 12px;font-size:12.5px;box-sizing:border-box">
+                    <button onclick="{{ postComment }}" style="border:none;border-radius:10px;background:oklch(58% 0.16 300);color:white;font-size:12px;font-weight:600;padding:9px 14px;cursor:pointer">Post</button>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- TEMPLATES -->
+            <sc-if value="{{ showTemplates }}">
+              <div style="padding:18px 18px 24px">
+                <div style="font-size:13px;color:oklch(48% 0.006 60);margin-bottom:16px;line-height:1.5">Pre-built prompts for the moments every family wants to remember. Tap one to start capturing.</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                  <sc-for list="{{ templates }}" as="t" hint-placeholder-count="8">
+                    <div onclick="{{ startCapture }}" style="background:oklch(97% 0.004 70);border:1px solid oklch(91% 0.006 60);border-radius:14px;padding:14px;cursor:pointer">
+                      <div style="width:36px;height:36px;border-radius:11px;background:color-mix(in oklch, {{ t.dot }} 18%, white);display:flex;align-items:center;justify-content:center"><div style="width:10px;height:10px;border-radius:50%;background:{{ t.dot }}"></div></div>
+                      <div style="font-size:13px;font-weight:600;color:oklch(22% 0.006 60);margin-top:8px;line-height:1.3">{{ t.title }}</div>
+                    </div>
+                  </sc-for>
+                  <div onclick="{{ startCapture }}" style="background:oklch(97% 0.004 70);border:1.5px dashed oklch(85% 0.006 60);border-radius:14px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:oklch(50% 0.006 60);cursor:pointer">
+                    <div style="font-size:20px">+</div>
+                    <div style="font-size:12px;margin-top:6px">Custom template</div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- FAMILY TREE -->
+            <sc-if value="{{ showFamilyTree }}">
+              <div style="padding:18px 18px 24px">
+                <div style="font-size:13px;color:oklch(48% 0.006 60);margin-bottom:16px;line-height:1.5">Tap any branch to view or add someone.</div>
+                <div style="position:relative;height:300px;background:oklch(97% 0.004 70);border-radius:16px;overflow:hidden">
+                  <svg viewBox="0 0 320 280" style="width:100%;height:100%;position:absolute;inset:0">
+                    <line x1="160" y1="230" x2="160" y2="180" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                    <line x1="160" y1="180" x2="90" y2="120" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                    <line x1="160" y1="180" x2="230" y2="120" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                    <line x1="90" y1="120" x2="50" y2="60" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                    <line x1="90" y1="120" x2="130" y2="60" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                    <line x1="230" y1="120" x2="190" y2="60" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                    <line x1="230" y1="120" x2="270" y2="60" stroke="oklch(85% 0.006 60)" stroke-width="2"></line>
+                  </svg>
+                  <sc-for list="{{ treeNodes }}" as="n" hint-placeholder-count="7">
+                    <div onclick="{{ n.select }}" style="{{ n.style }}">{{ n.initial }}</div>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ treeEditorOpen }}">
+                  <div style="{{ cardStyle }}margin-top:14px">
+                    <div style="font-size:13.5px;font-weight:700;color:oklch(20% 0.006 60);margin-bottom:10px">{{ selectedNode.name }}</div>
+                    <div style="display:flex;flex-direction:column;gap:10px">
+                      <input placeholder="Name" value="{{ editorName }}" onchange="{{ setEditorName }}" style="{{ inputStyle }}">
+                      <input placeholder="Year" value="{{ editorYear }}" onchange="{{ setEditorYear }}" style="{{ inputStyle }}">
+                      <input placeholder="Relation — grandmother, uncle…" value="{{ editorRelation }}" onchange="{{ setEditorRelation }}" style="{{ inputStyle }}">
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:12px">
+                      <button style="{{ secondaryBtnSmall }}" onclick="{{ closeTreeEditor }}">Cancel</button>
+                      <button style="{{ primaryBtnSmall }}" onclick="{{ saveTreeEditor }}">Save</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <div onclick="{{ addTreeNode }}" style="text-align:center;margin-top:14px;font-size:13px;color:oklch(50% 0.15 300);cursor:pointer">+ Add family member</div>
+              </div>
+            </sc-if>
+
+            <!-- SHARED SPACE -->
+            <sc-if value="{{ showSharedSpace }}">
+              <div style="padding:18px 18px 24px">
+                <div style="font-size:13px;color:oklch(48% 0.006 60);margin-bottom:16px;line-height:1.5">Everyone here can see and add to {{ activeChild.name }}'s memories.</div>
+                <sc-if value="{{ inviteOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ cardStyle }}margin-bottom:16px;display:flex;gap:8px">
+                    <input placeholder="Name or email" value="{{ inviteName }}" onchange="{{ setInviteName }}" onkeydown="{{ onInviteKeydown }}" style="flex:1;min-width:0;border:1px solid oklch(88% 0.006 60);border-radius:10px;padding:10px 12px;font-size:13px;box-sizing:border-box">
+                    <button onclick="{{ sendInvite }}" style="border:none;border-radius:10px;background:oklch(58% 0.16 300);color:white;font-size:13px;font-weight:600;padding:0 16px;cursor:pointer">Send</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ inviteOpen }}" hint-placeholder-val="{{ true }}"></sc-if>
+                <button style="{{ primaryBtn }}margin-bottom:16px" onclick="{{ openInvite }}">Invite family member</button>
+                <div style="font-size:12px;color:oklch(50% 0.006 60);text-transform:uppercase;letter-spacing:.03em;font-weight:600;margin-bottom:8px">Members</div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <sc-for list="{{ familyMembers }}" as="fm" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:10px;background:oklch(97% 0.004 70);border-radius:12px;padding:10px 12px">
+                      <div style="width:34px;height:34px;border-radius:50%;background:oklch(78% 0.10 300);color:white;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none">{{ fm.initial }}</div>
+                      <div style="flex:1">
+                        <div style="font-size:13px;font-weight:600;color:oklch(22% 0.006 60)">{{ fm.name }}</div>
+                        <div style="font-size:11.5px;color:oklch(52% 0.006 60)">{{ fm.role }}</div>
+                      </div>
+                      <div onclick="{{ fm.toggle }}" style="{{ fm.toggleStyle }}"><div style="{{ fm.knobStyle }}"></div></div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="font-size:11px;color:oklch(55% 0.006 60);margin-top:14px;line-height:1.5">Toggle controls whether that person can add new memories, or only view.</div>
+              </div>
+            </sc-if>
+
+            <!-- MEMORY BOOK -->
+            <sc-if value="{{ showBook }}">
+              <div style="padding:18px 18px 24px">
+                <div style="display:flex;gap:6px;margin-bottom:18px">
+                  <sc-for list="{{ bookDots }}" as="d" hint-placeholder-count="4">
+                    <div style="{{ d.style }}"></div>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ bookStep0 }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60);margin-bottom:4px">Select memories</div>
+                  <div style="font-size:12.5px;color:oklch(50% 0.006 60);margin-bottom:14px">{{ bookSelectedCount }} selected</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+                    <sc-for list="{{ bookCandidates }}" as="m" hint-placeholder-count="9">
+                      <div onclick="{{ m.toggle }}" style="{{ m.pickStyle }}">
+                        <div style="{{ m.thumbStyle }}"></div>
+                        <sc-if value="{{ m.picked }}"><div style="position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:oklch(58% 0.16 300);color:white;font-size:11px;display:flex;align-items:center;justify-content:center">✓</div></sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ bookStep1 }}">
+                  <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60);margin-bottom:14px">Choose a layout</div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <sc-for list="{{ bookLayouts }}" as="l" hint-placeholder-count="3">
+                      <div onclick="{{ l.select }}" style="{{ l.style }}">
+                        <div style="{{ l.previewStyle }}"></div>
+                        <div style="font-size:13px;font-weight:600;color:oklch(22% 0.006 60)">{{ l.name }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ bookStep2 }}">
+                  <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60);margin-bottom:14px">Personalize</div>
+                  <div style="display:flex;flex-direction:column;gap:12px">
+                    <input placeholder="Book title — e.g. Ema's First Year" value="{{ bookTitle }}" onchange="{{ setBookTitle }}" style="{{ inputStyle }}">
+                    <textarea placeholder="Dedication message for grandma &amp; grandpa…" value="{{ bookDedication }}" onchange="{{ setBookDedication }}" style="{{ inputStyle }}min-height:80px;resize:none;font-family:inherit"></textarea>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ bookStep3 }}">
+                  <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60);margin-bottom:14px">Preview &amp; export</div>
+                  <div style="display:flex;justify-content:center;margin-bottom:18px">
+                    <div style="width:150px;height:190px;background:oklch(96% 0.006 60);border-radius:4px;box-shadow:0 10px 24px oklch(0% 0 0 / 0.15), -4px 0 0 oklch(90% 0.006 60), -8px 0 0 oklch(85% 0.006 60);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:oklch(30% 0.006 60);text-align:center;padding:12px;box-sizing:border-box">{{ bookPreviewTitle }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <button style="{{ primaryBtn }}" onclick="{{ exportData }}">Export as PDF</button>
+                    <button style="{{ secondaryBtn }}" onclick="{{ orderPrint }}">Order printed copy</button>
+                  </div>
+                </sc-if>
+
+                <div style="display:flex;gap:10px;margin-top:22px">
+                  <sc-if value="{{ bookStepGt0 }}"><button style="{{ secondaryBtnSmall }}" onclick="{{ bookBack }}">Back</button></sc-if>
+                  <sc-if value="{{ bookStepLt3 }}"><button style="{{ primaryBtnSmall }}flex:1" onclick="{{ bookNext }}">Continue</button></sc-if>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- PROFILE -->
+            <sc-if value="{{ showProfile }}">
+              <div style="padding:18px 18px 24px">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+                  <div style="width:52px;height:52px;border-radius:50%;background:oklch(58% 0.16 300);color:white;font-size:18px;display:flex;align-items:center;justify-content:center;flex:none">{{ profileInitial }}</div>
+                  <div>
+                    <div style="font-size:15px;font-weight:700;color:oklch(20% 0.006 60)">{{ profileName }}</div>
+                    <div style="font-size:12px;color:oklch(50% 0.006 60)">{{ profileRole }}</div>
+                  </div>
+                </div>
+
+                <sc-for list="{{ profileGroups }}" as="g" hint-placeholder-count="4">
+                  <div style="margin-bottom:16px">
+                    <div style="font-size:11.5px;color:oklch(50% 0.006 60);text-transform:uppercase;letter-spacing:.03em;font-weight:600;margin-bottom:8px">{{ g.label }}</div>
+                    <div style="background:oklch(97% 0.004 70);border-radius:14px;overflow:hidden">
+                      <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+                        <div onclick="{{ it.action }}" style="{{ it.rowStyle }}">
+                          <div style="font-size:13.5px;color:oklch(24% 0.006 60)">{{ it.label }}</div>
+                          <div style="font-size:12px;color:oklch(52% 0.006 60)">{{ it.value }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+
+                <div style="{{ cardStyle }}background:oklch(94% 0.03 300 / 0.5)">
+                  <div style="font-size:13px;font-weight:700;color:oklch(22% 0.006 60);margin-bottom:4px">Your family's data</div>
+                  <div style="font-size:12px;color:oklch(45% 0.006 60);line-height:1.5">Encrypted, never used to train AI, and stored in your region. <span onclick="{{ openPromise }}" style="color:oklch(50% 0.15 300);text-decoration:underline;cursor:pointer">View our privacy commitments</span></div>
+                </div>
+              </div>
+            </sc-if>
+
+          </div>
+
+          <!-- BOTTOM TAB BAR -->
+          <sc-if value="{{ showTabBar }}">
+            <div style="flex:none;display:flex;justify-content:space-around;align-items:center;padding:8px 8px 6px;border-top:1px solid oklch(91% 0.006 60);background:oklch(99% 0.003 70)">
+              <div onclick="{{ jumpHome }}" style="{{ tabStyle_home }}"><div style="width:18px;height:18px;border-radius:5px;background:currentColor"></div><div style="font-size:10.5px">Home</div></div>
+              <div onclick="{{ jumpDiary }}" style="{{ tabStyle_diary }}"><div style="display:flex;flex-direction:column;gap:3px;width:18px;height:18px;justify-content:center"><div style="height:3px;border-radius:2px;background:currentColor"></div><div style="height:3px;border-radius:2px;background:currentColor;width:65%"></div></div><div style="font-size:10.5px">Diary</div></div>
+              <div onclick="{{ startCapture }}" style="display:flex;flex-direction:column;align-items:center;color:white;cursor:pointer;margin-top:-14px">
+                <div style="width:50px;height:50px;border-radius:50%;background:oklch(58% 0.16 300);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px oklch(58% 0.16 300 / 0.4)"><div style="width:16px;height:16px;border-radius:50%;background:white"></div></div>
+              </div>
+              <div onclick="{{ jumpFamilyTree }}" style="{{ tabStyle_family }}"><div style="display:flex;gap:2px;align-items:center;height:18px">
+                <div style="width:7px;height:7px;border-radius:50%;background:currentColor"></div><div style="width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.55"></div><div style="width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.3"></div>
+              </div><div style="font-size:10.5px">Family</div></div>
+              <div onclick="{{ jumpProfile }}" style="{{ tabStyle_profile }}"><div style="width:16px;height:16px;border-radius:50%;border:2.5px solid currentColor;box-sizing:border-box"></div><div style="font-size:10.5px">Profile</div></div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===================== PRIVACY PROMISE OVERLAY ===================== -->
+      <sc-if value="{{ promiseOpen }}">
+        <div style="position:absolute;inset:0;background:oklch(98.5% 0.004 70);display:flex;flex-direction:column;z-index:20">
+          <div style="display:flex;align-items:center;gap:10px;padding:16px 18px 10px;flex:none">
+            <div onclick="{{ closePromise }}" style="width:32px;height:32px;border-radius:10px;background:oklch(94% 0.006 60);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:oklch(30% 0.006 60)">‹</div>
+            <div style="font-size:16px;font-weight:700;color:oklch(20% 0.006 60)">Our privacy promise</div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:6px 20px 30px">
+            <div style="font-size:13px;color:oklch(45% 0.006 60);line-height:1.6;margin-bottom:18px">Memma exists to hold your family's most fragile moments. Here's exactly how we protect them.</div>
+            <sc-for list="{{ promisePoints }}" as="p" hint-placeholder-count="6">
+              <div style="display:flex;gap:12px;margin-bottom:18px">
+                <div style="width:30px;height:30px;border-radius:50%;background:oklch(94% 0.03 300);color:oklch(50% 0.15 300);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none">{{ p.icon }}</div>
+                <div>
+                  <div style="font-size:13.5px;font-weight:700;color:oklch(22% 0.006 60)">{{ p.title }}</div>
+                  <div style="font-size:12.5px;color:oklch(48% 0.006 60);margin-top:3px;line-height:1.5">{{ p.body }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===================== CAPTURE OVERLAY ===================== -->
+      <sc-if value="{{ captureOpen }}">
+        <div style="position:absolute;inset:0;background:oklch(97.5% 0.006 300);display:flex;flex-direction:column;z-index:10">
+
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 18px;flex:none">
+            <div onclick="{{ closeCapture }}" style="color:oklch(30% 0.006 60);font-size:15px;cursor:pointer;width:30px;height:30px;border-radius:50%;background:oklch(92% 0.015 300);display:flex;align-items:center;justify-content:center">✕</div>
+            <div style="color:oklch(35% 0.006 60);font-size:13px;font-weight:600">{{ captureTimer }}</div>
+            <div onclick="{{ toggleTranscriptMode }}" style="display:flex;align-items:center;gap:6px;background:oklch(92% 0.015 300);border-radius:20px;padding:5px 10px;cursor:pointer">
+              <div style="width:6px;height:6px;border-radius:50%;background:oklch(58% 0.16 300)"></div>
+              <div style="color:oklch(35% 0.006 60);font-size:11.5px">{{ transcriptModeLabel }}</div>
+            </div>
+          </div>
+
+          <div style="margin:0 18px;border-radius:20px;flex:1;background:repeating-linear-gradient(135deg, oklch(93% 0.006 60), oklch(93% 0.006 60) 10px, oklch(96% 0.005 65) 10px, oklch(96% 0.005 65) 20px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden">
+            <div style="font-family:ui-monospace,monospace;font-size:11px;color:oklch(55% 0.006 60);text-align:center;padding:0 20px">camera viewfinder</div>
+
+            <sc-if value="{{ captureIdle }}" hint-placeholder-val="{{ true }}">
+              <div style="position:absolute;top:16px;left:16px;right:16px;display:flex;background:oklch(93% 0.006 60);border-radius:20px;padding:3px">
+                <div onclick="{{ setModeVideo }}" style="{{ modeToggleStyleVideo }}">Video</div>
+                <div onclick="{{ setModeAudio }}" style="{{ modeToggleStyleAudio }}">Audio only</div>
+              </div>
+              <div style="position:absolute;bottom:18px;left:18px;right:18px;text-align:center;color:oklch(40% 0.006 60);font-size:12.5px">
+                <sc-if value="{{ isVideoMode }}" hint-placeholder-val="{{ true }}">Point the camera, then tap record and just talk.</sc-if>
+                <sc-if value="{{ isAudioMode }}">No camera needed — tap record and just talk.</sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ captureActive }}">
+              <div style="position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:6px;background:oklch(100% 0 0 / 0.8);border-radius:20px;padding:5px 10px 5px 8px">
+                <div style="width:7px;height:7px;border-radius:50%;background:oklch(58% 0.16 300);animation:mm-pulse 1.2s infinite"></div>
+                <div style="font-size:11px;font-weight:600;color:oklch(30% 0.006 60)">REC</div>
+              </div>
+              <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg, oklch(97.5% 0.006 300 / 0.97), oklch(97.5% 0.006 300 / 0));padding:26px 16px 14px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:flex-end;gap:3px;height:20px">
+                  <sc-for list="{{ waveBars }}" as="b" hint-placeholder-count="18">
+                    <div style="{{ b.style }}"></div>
+                  </sc-for>
+                </div>
+                <div style="background:white;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5;color:oklch(28% 0.006 60);min-height:44px;box-shadow:0 2px 8px oklch(0% 0 0 / 0.06)">{{ liveTranscriptText }}</div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="flex:none;padding:20px 24px 30px;display:flex;justify-content:center;align-items:center;gap:26px">
+            <sc-if value="{{ captureIdle }}">
+              <div onclick="{{ tapRecord }}" style="width:68px;height:68px;border-radius:50%;background:white;border:4px solid oklch(58% 0.16 300);display:flex;align-items:center;justify-content:center;cursor:pointer">
+                <div style="width:26px;height:26px;border-radius:50%;background:oklch(58% 0.16 300)"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ captureRecording }}">
+              <div onclick="{{ tapPause }}" style="width:56px;height:56px;border-radius:16px;background:oklch(92% 0.015 300);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:oklch(35% 0.006 60);font-weight:600">Pause</div>
+              <div onclick="{{ tapStop }}" style="width:68px;height:68px;border-radius:50%;background:oklch(58% 0.16 300);display:flex;align-items:center;justify-content:center;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:5px;background:white"></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ capturePaused }}">
+              <div onclick="{{ tapResume }}" style="width:56px;height:56px;border-radius:16px;background:oklch(92% 0.015 300);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:oklch(35% 0.006 60);font-weight:600">Resume</div>
+              <div onclick="{{ tapStop }}" style="width:68px;height:68px;border-radius:50%;background:oklch(58% 0.16 300);display:flex;align-items:center;justify-content:center;cursor:pointer">
+                <div style="width:22px;height:22px;border-radius:5px;background:white"></div>
+              </div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ captureSaved }}">
+            <div style="position:absolute;inset:0;background:oklch(97.5% 0.006 300);display:flex;flex-direction:column;padding:26px 22px 30px;box-sizing:border-box">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+                <div style="width:32px;height:32px;border-radius:50%;background:oklch(58% 0.16 300);color:white;display:flex;align-items:center;justify-content:center;font-size:15px">✓</div>
+                <div>
+                  <div style="font-size:14.5px;font-weight:700;color:oklch(20% 0.006 60)">Saved to {{ activeChild.name }}'s diary</div>
+                  <div style="font-size:12px;color:oklch(50% 0.006 60)">Just now · transcribed automatically</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;background:white;border-radius:14px;padding:12px;box-shadow:0 1px 6px oklch(0% 0 0 / 0.05);margin-bottom:14px">
+                <div style="width:44px;height:44px;border-radius:50%;background:oklch(58% 0.16 300);display:flex;align-items:center;justify-content:center;flex:none">
+                  <div style="width:0;height:0;border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent white;margin-left:2px"></div>
+                </div>
+                <div style="flex:1">
+                  <div style="display:flex;align-items:flex-end;gap:2px;height:16px">
+                    <sc-for list="{{ waveBars }}" as="b" hint-placeholder-count="18">
+                      <div style="{{ b.style }}"></div>
+                    </sc-for>
+                  </div>
+                  <div style="font-size:11px;color:oklch(50% 0.006 60);margin-top:4px">{{ mediaCaptionLabel }}</div>
+                </div>
+              </div>
+              <div style="background:white;border-radius:14px;padding:14px;box-shadow:0 1px 6px oklch(0% 0 0 / 0.05);margin-bottom:14px">
+                <div style="font-size:11px;color:oklch(50% 0.15 300);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px">Transcript</div>
+                <div style="font-size:14px;line-height:1.55;color:oklch(26% 0.006 60);font-family:Georgia,serif">{{ liveTranscriptText }}</div>
+              </div>
+              <div style="display:flex;gap:10px;margin-bottom:14px;align-items:flex-start">
+                <image-slot id="{{ captureSavedPhotoId }}" shape="rounded" radius="12" placeholder="photo" style="width:96px;height:96px;flex:none"></image-slot>
+                <div style="flex:1;min-width:0">
+                  <div onclick="{{ toggleMilestonePicker }}" style="box-sizing:border-box;border:1px solid oklch(88% 0.006 60);border-radius:12px;background:white;display:flex;align-items:center;gap:9px;padding:12px 12px;cursor:pointer">
+                    <div style="width:11px;height:11px;background:oklch(50% 0.15 300);transform:rotate(45deg);border-radius:2px;flex:none"></div>
+                    <div style="font-size:13px;font-weight:600;color:oklch(28% 0.006 60);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ milestoneBtnLabel }}</div>
+                    <div style="font-size:11px;color:oklch(55% 0.006 60);flex:none">▾</div>
+                  </div>
+                  <sc-if value="{{ milestonePickerOpen }}">
+                    <div style="margin-top:8px;background:white;border:1px solid oklch(90% 0.006 60);border-radius:12px;overflow:hidden">
+                      <div style="display:flex;gap:6px;padding:8px;border-bottom:1px solid oklch(94% 0.006 60)">
+                        <input placeholder="Your own tag — e.g. funny word" value="{{ customTagInput }}" onchange="{{ setCustomTagInput }}" onkeydown="{{ onCustomTagKeydown }}" style="flex:1;min-width:0;border:1px solid oklch(88% 0.006 60);border-radius:8px;padding:7px 9px;font-size:12px;box-sizing:border-box">
+                        <button onclick="{{ submitCustomTag }}" style="border:none;border-radius:8px;background:oklch(58% 0.16 300);color:white;font-size:12px;font-weight:600;padding:0 12px;cursor:pointer">Add</button>
+                      </div>
+                      <div style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;border-bottom:1px solid oklch(94% 0.006 60)">
+                        <sc-for list="{{ genericTagOptions }}" as="gt" hint-placeholder-count="3">
+                          <div onclick="{{ gt.pick }}" style="font-size:11.5px;padding:6px 10px;border-radius:14px;background:oklch(94% 0.03 300 / 0.6);color:oklch(50% 0.15 300);cursor:pointer">{{ gt.title }}</div>
+                        </sc-for>
+                      </div>
+                      <div style="max-height:140px;overflow-y:auto">
+                        <sc-for list="{{ milestoneOptions }}" as="mo" hint-placeholder-count="8">
+                          <div onclick="{{ mo.pick }}" style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid oklch(94% 0.006 60);cursor:pointer;font-size:12.5px;color:oklch(28% 0.006 60)">
+                            <div style="width:8px;height:8px;border-radius:50%;background:{{ mo.dot }};flex:none"></div><span>{{ mo.title }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+              <div style="flex:1"></div>
+              <button style="{{ primaryBtn }}" onclick="{{ closeCapture }}">Done</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </x-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const STORAGE_KEY = 'memma_app_state_v1';
+
+class Component extends DCLogic {
+  state = (() => {
+    const base = {
+      mode: 'onboarding', obStep: 0,
+      tab: 'home', stack: [],
+      captureStatus: 'closed',
+      transcriptMode: 'live',
+      elapsed: 0,
+      selectedEntryId: null,
+      treeEditorNodeId: null, editorName: '', editorYear: '', editorRelation: '',
+      bookStep: 0,
+      bookPicked: {1:true,2:true,3:true},
+      diarySwatchIdx: 2,
+      diaryFilterIdx: 0,
+      parentName: '', parentRole: '', childName: '', childDob: '',
+      autoDetectLang: true, promiseOpen: false,
+      milestonePickerOpen: false, taggedMilestone: null, customTagInput: '',
+      captureMode: 'video',
+      familyToggles: {1:true,2:true,3:false,4:true},
+      extraFamilyMembers: [],
+      inviteOpen: false, inviteName: '',
+      treeOverrides: {}, treeExtra: [],
+      entryEditingTranscript: false, entryEditText: '', transcriptOverrides: {}, entryShowPhotoSlot: {},
+      newCommentText: '', extraComments: {},
+      bookTitle: '', bookDedication: '', bookLayoutIdx: 0,
+      notificationsOn: true,
+      onboarded: false,
+      savedToast: false
+    };
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        Object.assign(base, saved);
+        if (saved.onboarded) base.mode = 'app';
+      }
+    } catch (e) {}
+    return base;
+  })();
+
+  memories = [
+    { id:1, tag:'First word', excerpt:'Said "banana" clear as day at breakfast', dateLabel:'Today', tint:'oklch(90% 0.03 300)', type:'audio', duration:'0:14', full:'Said "banana" completely clearly, pointing right at the fruit bowl — first time we\'ve heard a real word. Looked so proud and said it three more times.', comments:[{initial:'D', name:'Dad', text:'she said it to me on the video call too!!'}] },
+    { id:2, tag:'Milestone · First steps', excerpt:'Six steps across the kitchen, no support', dateLabel:'Yesterday', tint:'oklch(88% 0.02 60)', type:'video', duration:'0:22', full:'Let go of the couch and just walked — six steps across the kitchen before sitting down. We both just stood there stunned for a second before cheering.', comments:[] },
+    { id:3, tag:'Funny moment', excerpt:'Insisted the dog was "also a baby"', dateLabel:'Mon', tint:'oklch(89% 0.025 250)', type:'video', duration:'0:31', full:'Was feeding the dog with her toy spoon and said very seriously that he is "also a baby" and needs a nap.', comments:[{initial:'G', name:'Grandma', text:'she gets that logic from you'}] },
+    { id:4, tag:'First day of daycare', excerpt:'Cried for two minutes, then found the blocks', dateLabel:'Last week', tint:'oklch(90% 0.02 150)', type:'audio', duration:'0:40', full:'Drop-off was rough for about two minutes, then the teacher said she found the block corner and didn\'t look back. Picked her up all smiles.', comments:[] },
+    { id:5, tag:'Bedtime story', excerpt:'Wants the same page reread five times', dateLabel:'Last week', tint:'oklch(89% 0.02 20)', type:'audio', duration:'0:19', full:'Keeps flipping back to the page with the fox and making me read it again. Five times tonight. Not complaining.', comments:[] },
+    { id:6, tag:'First haircut', excerpt:'Sat completely still, obsessed with the cape', dateLabel:'2 weeks ago', tint:'oklch(90% 0.02 300)', type:'video', duration:'0:26', full:'Braced for a meltdown but she was mesmerized by the striped cape and sat totally still the whole time.', comments:[] }
+  ];
+
+  familyMembers = [
+    { id:1, name:'Daniel', role:'Co-parent · Owner', initial:'D' },
+    { id:2, name:'Grandma Vera', role:'Collaborator', initial:'V' },
+    { id:3, name:'Grandpa Ivan', role:'Viewer', initial:'I' },
+    { id:4, name:'Aunt Mira', role:'Collaborator', initial:'M' }
+  ];
+
+  templates = [
+    {title:'First steps'}, {title:'First word'},
+    {title:'First day of school'}, {title:'First day of daycare'},
+    {title:'First food'}, {title:'First laugh'},
+    {title:'First friend'}, {title:'First haircut'}
+  ].map((t, i) => ({ ...t, dot: ['oklch(76% 0.14 350)', 'oklch(78% 0.13 230)', 'oklch(82% 0.14 90)', 'oklch(76% 0.1 40)'][i % 4] }));
+
+  treeNodesData = [
+    {id:1,name:'Ema',relation:'Child',x:'42%',y:'80%'},
+    {id:2,name:'Elena',relation:'Mother',x:'20%',y:'38%'},
+    {id:3,name:'Daniel',relation:'Father',x:'64%',y:'38%'},
+    {id:4,name:'Vera',relation:'Grandmother',x:'5%',y:'6%'},
+    {id:5,name:'Petar',relation:'Grandfather',x:'32%',y:'6%'},
+    {id:6,name:'Ivan',relation:'Grandfather',x:'52%',y:'6%'},
+    {id:7,name:'Rada',relation:'Grandmother',x:'78%',y:'6%'}
+  ];
+
+  bookLayoutsData = ['Classic scrapbook', 'Clean grid', 'Full-bleed photo story'];
+
+  timerRef = null;
+  toastRef = null;
+
+  componentWillUnmount() { if (this.timerRef) clearInterval(this.timerRef); if (this.toastRef) clearTimeout(this.toastRef); }
+
+  persist() {
+    const st = this.state;
+    const data = {
+      parentName: st.parentName, parentRole: st.parentRole, childName: st.childName, childDob: st.childDob,
+      autoDetectLang: st.autoDetectLang, diarySwatchIdx: st.diarySwatchIdx, onboarded: st.onboarded,
+      notificationsOn: st.notificationsOn, familyToggles: st.familyToggles, extraFamilyMembers: st.extraFamilyMembers,
+      treeOverrides: st.treeOverrides, treeExtra: st.treeExtra, bookPicked: st.bookPicked,
+      bookTitle: st.bookTitle, bookDedication: st.bookDedication, bookLayoutIdx: st.bookLayoutIdx,
+      transcriptOverrides: st.transcriptOverrides, extraComments: st.extraComments
+    };
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  flashSaved() {
+    this.setState({ savedToast: true });
+    if (this.toastRef) clearTimeout(this.toastRef);
+    this.toastRef = setTimeout(() => this.setState({ savedToast: false }), 1400);
+  }
+
+  // ---- navigation ----
+  navJump(tab) { this.setState({ mode: 'app', tab, stack: [], captureStatus: 'closed' }); }
+  navPush(screen) { this.setState(s => ({ stack: [...s.stack, screen] })); }
+  navBack() { this.setState(s => ({ stack: s.stack.slice(0, -1) })); }
+
+  // ---- onboarding ----
+  obNext() { this.setState(s => ({ obStep: Math.min(s.obStep + 1, 3) })); }
+  setField(key, val) { this.setState({ [key]: val }); }
+  toggleAutoDetect() { this.setState(s => ({ autoDetectLang: !s.autoDetectLang }), () => this.persist()); }
+  openPromise() { this.setState({ promiseOpen: true }); }
+  closePromise() { this.setState({ promiseOpen: false }); }
+  toggleMilestonePicker() { this.setState(s => ({ milestonePickerOpen: !s.milestonePickerOpen })); }
+  pickMilestone(title) { this.setState({ taggedMilestone: title, milestonePickerOpen: false, customTagInput: '' }); }
+  submitCustomTag() { if (this.state.customTagInput.trim()) this.pickMilestone(this.state.customTagInput.trim()); }
+  obBack() { this.setState(s => ({ obStep: Math.max(s.obStep - 1, 0) })); }
+  obFinish() { this.setState({ mode: 'app', onboarded: true }, () => { this.persist(); this.flashSaved(); }); }
+  obTouchStart(e) { this._obTouchX = e.touches[0].clientX; }
+  obTouchEnd(e) {
+    if (this._obTouchX == null) return;
+    const dx = e.changedTouches[0].clientX - this._obTouchX;
+    this._obTouchX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) this.obNext(); else this.obBack();
+  }
+
+  // ---- capture ----
+  startCapture() { this.setState({ captureStatus: 'idle', elapsed: 0, captureMode: 'video' }); }
+  setCaptureMode(mode) { this.setState({ captureMode: mode }); }
+  closeCapture() { if (this.timerRef) clearInterval(this.timerRef); this.setState({ captureStatus: 'closed' }); }
+  toggleTranscriptMode() { this.setState(s => ({ transcriptMode: s.transcriptMode === 'live' ? 'final' : 'live' })); }
+  tapRecord() {
+    this.setState({ captureStatus: 'recording' });
+    this.timerRef = setInterval(() => this.setState(s => ({ elapsed: s.elapsed + 1 })), 1000);
+  }
+  tapPause() { if (this.timerRef) clearInterval(this.timerRef); this.setState({ captureStatus: 'paused' }); }
+  tapResume() {
+    this.setState({ captureStatus: 'recording' });
+    this.timerRef = setInterval(() => this.setState(s => ({ elapsed: s.elapsed + 1 })), 1000);
+  }
+  tapStop() { if (this.timerRef) clearInterval(this.timerRef); this.setState({ captureStatus: 'saved' }, () => { this.persist(); this.flashSaved(); }); }
+
+  // ---- diary / entries ----
+  openEntry(id) { this.setState(s => ({ stack: [...s.stack, 'entryDetail'], selectedEntryId: id, entryEditingTranscript: false })); }
+  setDiaryFilter(i) { this.setState({ diaryFilterIdx: i }); }
+
+  startEditTranscript() {
+    const id = this.state.selectedEntryId;
+    const base = this.memories.find(m => m.id === id);
+    const current = this.state.transcriptOverrides[id] || (base ? base.full : '');
+    this.setState({ entryEditingTranscript: true, entryEditText: current });
+  }
+  cancelEditTranscript() { this.setState({ entryEditingTranscript: false }); }
+  saveEditTranscript() {
+    const id = this.state.selectedEntryId;
+    this.setState(s => ({ transcriptOverrides: { ...s.transcriptOverrides, [id]: s.entryEditText }, entryEditingTranscript: false }), () => { this.persist(); this.flashSaved(); });
+  }
+  setEntryEditText(e) { this.setState({ entryEditText: e.target.value }); }
+  showAddPhoto() { const id = this.state.selectedEntryId; this.setState(s => ({ entryShowPhotoSlot: { ...s.entryShowPhotoSlot, [id]: true } })); }
+  setNewComment(e) { this.setState({ newCommentText: e.target.value }); }
+  postComment() {
+    const id = this.state.selectedEntryId;
+    const text = (this.state.newCommentText || '').trim();
+    if (!text) return;
+    const name = this.state.parentName || 'You';
+    const initial = (name[0] || 'Y').toUpperCase();
+    this.setState(s => ({ extraComments: { ...s.extraComments, [id]: [...(s.extraComments[id] || []), { initial, name, text }] }, newCommentText: '' }), () => this.persist());
+  }
+  onCommentKeydown(e) { if (e.key === 'Enter') this.postComment(); }
+
+  // ---- family tree ----
+  getMergedNode(id) {
+    const extra = this.state.treeExtra.find(n => n.id === id);
+    const base = extra || this.treeNodesData.find(n => n.id === id);
+    if (!base) return null;
+    const override = this.state.treeOverrides[id] || {};
+    const name = id === 1 ? (override.name || this.state.childName || 'Ema') : (override.name || base.name);
+    return { ...base, ...override, name };
+  }
+  openTreeNode(id) {
+    if (id === 'new') { this.setState({ treeEditorNodeId: 'new', editorName: '', editorYear: '', editorRelation: '' }); return; }
+    const node = this.getMergedNode(id);
+    this.setState({ treeEditorNodeId: id, editorName: node ? node.name : '', editorYear: (node && node.year) || '', editorRelation: node ? node.relation : '' });
+  }
+  setEditorName(e) { this.setState({ editorName: e.target.value }); }
+  setEditorYear(e) { this.setState({ editorYear: e.target.value }); }
+  setEditorRelation(e) { this.setState({ editorRelation: e.target.value }); }
+  closeTreeEditor() { this.setState({ treeEditorNodeId: null }); }
+  addTreeNode() { this.openTreeNode('new'); }
+  saveTreeEditor() {
+    const st = this.state;
+    if (st.treeEditorNodeId === 'new') {
+      const id = 'extra-' + Date.now();
+      const newNode = { id, name: st.editorName.trim() || 'New member', relation: st.editorRelation.trim() || 'Family', year: st.editorYear, x: (18 + Math.round(Math.random() * 64)) + '%', y: (8 + Math.round(Math.random() * 20)) + '%' };
+      this.setState(s => ({ treeExtra: [...s.treeExtra, newNode], treeEditorNodeId: null }), () => { this.persist(); this.flashSaved(); });
+    } else {
+      const id = st.treeEditorNodeId;
+      this.setState(s => ({ treeOverrides: { ...s.treeOverrides, [id]: { name: st.editorName.trim(), relation: st.editorRelation.trim(), year: st.editorYear } }, treeEditorNodeId: null }), () => { this.persist(); this.flashSaved(); });
+    }
+  }
+
+  // ---- shared space ----
+  toggleFamilyMember(id) { this.setState(s => ({ familyToggles: { ...s.familyToggles, [id]: !s.familyToggles[id] } }), () => this.persist()); }
+  openInvite() { this.setState({ inviteOpen: true, inviteName: '' }); }
+  setInviteName(e) { this.setState({ inviteName: e.target.value }); }
+  onInviteKeydown(e) { if (e.key === 'Enter') this.sendInvite(); }
+  sendInvite() {
+    const name = this.state.inviteName.trim();
+    if (!name) return;
+    const id = 'extra-' + Date.now();
+    const initial = name[0].toUpperCase();
+    this.setState(s => ({ extraFamilyMembers: [...s.extraFamilyMembers, { id, name, role: 'Invited · pending', initial }], familyToggles: { ...s.familyToggles, [id]: true }, inviteOpen: false, inviteName: '' }), () => { this.persist(); this.flashSaved(); });
+  }
+
+  // ---- book ----
+  bookNext() { this.setState(s => ({ bookStep: Math.min(s.bookStep + 1, 3) })); }
+  bookBack() { this.setState(s => ({ bookStep: Math.max(s.bookStep - 1, 0) })); }
+  toggleBookPick(id) { this.setState(s => ({ bookPicked: { ...s.bookPicked, [id]: !s.bookPicked[id] } }), () => this.persist()); }
+  setBookTitle(e) { this.setState({ bookTitle: e.target.value }, () => this.persist()); }
+  setBookDedication(e) { this.setState({ bookDedication: e.target.value }, () => this.persist()); }
+  selectBookLayout(i) { this.setState({ bookLayoutIdx: i }, () => this.persist()); }
+  exportData() {
+    const st = this.state;
+    const payload = { parent: { name: st.parentName, role: st.parentRole }, child: { name: st.childName, dob: st.childDob }, memories: this.memories };
+    try {
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'memma-export.json'; a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {}
+    this.flashSaved();
+  }
+  orderPrint() { this.flashSaved(); }
+
+  // ---- profile ----
+  toggleNotifications() { this.setState(s => ({ notificationsOn: !s.notificationsOn }), () => this.persist()); }
+  deleteAllData() {
+    if (typeof window !== 'undefined' && window.confirm && !window.confirm('Delete all your family\'s data? This cannot be undone.')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    this.setState({
+      mode: 'onboarding', obStep: 0, onboarded: false, parentName: '', parentRole: '', childName: '', childDob: '',
+      autoDetectLang: true, diarySwatchIdx: 2, familyToggles: {1:true,2:true,3:false,4:true}, extraFamilyMembers: [],
+      treeOverrides: {}, treeExtra: [], bookPicked: {1:true,2:true,3:true}, bookTitle: '', bookDedication: '',
+      bookLayoutIdx: 0, notificationsOn: true, transcriptOverrides: {}, extraComments: {}
+    });
+  }
+  logOut() {
+    if (typeof window !== 'undefined' && window.confirm && !window.confirm('Log out?')) return;
+    this.setState({ mode: 'onboarding', obStep: 0 });
+  }
+
+  fmtTime(sec) {
+    const m = Math.floor(sec / 60).toString().padStart(2, '0');
+    const s = (sec % 60).toString().padStart(2, '0');
+    return m + ':' + s;
+  }
+
+  renderVals() {
+    const st = this.state;
+    const top = st.stack[st.stack.length - 1];
+    const subTitles = { templates:'Milestone templates', familyTree:'Family tree', sharedSpace:'Shared family space', book:'Memory book', entryDetail:'' };
+    const kidName = st.childName || 'Ema';
+    const activeChild = { name: kidName };
+
+    const primaryBtn = 'width:100%;padding:16px;border:none;border-radius:14px;background:oklch(58% 0.16 300);color:white;font-size:16px;font-weight:600;cursor:pointer;';
+    const primaryBtnSmall = 'padding:12px;border:none;border-radius:12px;background:oklch(58% 0.16 300);color:white;font-size:13.5px;font-weight:600;cursor:pointer;';
+    const secondaryBtn = 'width:100%;padding:15px;border:1px solid oklch(88% 0.006 60);border-radius:14px;background:white;color:oklch(28% 0.006 60);font-size:15px;font-weight:600;cursor:pointer;';
+    const secondaryBtnSmall = 'padding:12px;border:1px solid oklch(88% 0.006 60);border-radius:12px;background:white;color:oklch(28% 0.006 60);font-size:13px;font-weight:600;cursor:pointer;';
+    const inputStyle = 'width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid oklch(88% 0.006 60);border-radius:12px;font-size:14px;color:oklch(24% 0.006 60);background:white;';
+    const cardStyle = 'background:oklch(97% 0.004 70);border-radius:14px;padding:14px;';
+    const cardRowStyle = 'display:flex;align-items:center;gap:12px;background:oklch(97% 0.004 70);border-radius:14px;padding:11px 12px;cursor:pointer;';
+    const exploreTileStyle = 'background:oklch(97% 0.004 70);border-radius:14px;padding:14px;cursor:pointer;';
+    const exploreIconBadge = 'width:36px;height:36px;border-radius:10px;background:oklch(94% 0.03 300 / 0.6);display:flex;align-items:center;justify-content:center;';
+    const badgeBase = 'width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:';
+    const exploreIconBadge1 = badgeBase + 'oklch(76% 0.14 350 / 0.16);';
+    const exploreIconBadge2 = badgeBase + 'oklch(78% 0.13 230 / 0.16);';
+    const exploreIconBadge3 = badgeBase + 'oklch(82% 0.14 90 / 0.18);';
+    const exploreIconBadge4 = badgeBase + 'oklch(76% 0.1 40 / 0.18);';
+    const promptCardStyle = 'background:oklch(94% 0.03 300 / 0.5);border-radius:14px;padding:14px;';
+    const tagChipStyle = 'font-size:11px;color:oklch(45% 0.006 60);background:oklch(95% 0.005 60);border-radius:8px;padding:5px 10px;';
+
+    const tabBtnStyle = (active) => 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;min-width:48px;padding:6px 12px;border-radius:14px;color:' + (active ? 'oklch(58% 0.16 300)' : 'oklch(58% 0.006 60)') + ';background:' + (active ? 'oklch(94% 0.03 300 / 0.55)' : 'transparent') + ';';
+
+    const jumpBtnStyleFor = (key) => {
+      const active = (st.mode === 'onboarding' && key === 'onboarding') || (st.mode === 'app' && ((top ? top === key : st.tab === key) || (key === 'capture' && st.captureStatus !== 'closed')));
+      return 'padding:6px 12px;border-radius:20px;border:none;font-size:12px;cursor:pointer;background:' + (active ? 'oklch(58% 0.16 300)' : 'oklch(30% 0.02 300 / 0.12)') + ';color:' + (active ? 'white' : 'oklch(30% 0.02 300)') + ';';
+    };
+    const jumpBtnStyleOnboarding = jumpBtnStyleFor('onboarding');
+    const jumpBtnStyleHome = jumpBtnStyleFor('home');
+    const jumpBtnStyleDiary = jumpBtnStyleFor('diary');
+    const jumpBtnStyleCapture = jumpBtnStyleFor('capture');
+    const jumpBtnStyleTemplates = jumpBtnStyleFor('templates');
+    const jumpBtnStyleFamilyTree = jumpBtnStyleFor('familyTree');
+    const jumpBtnStyleSharedSpace = jumpBtnStyleFor('sharedSpace');
+    const jumpBtnStyleBook = jumpBtnStyleFor('book');
+    const jumpBtnStyleProfile = jumpBtnStyleFor('profile');
+
+    const waveBars = Array.from({length:18}, (_, i) => ({
+      style: 'width:3px;border-radius:2px;height:' + (6 + (i % 5) * 3) + 'px;background:oklch(58% 0.16 300);animation:mm-bar ' + (0.6 + (i % 4) * 0.15) + 's ease-in-out infinite;animation-delay:' + (i * 0.05) + 's;'
+    }));
+
+    const swatches = ['oklch(70% 0.1 25)','oklch(70% 0.1 150)','oklch(70% 0.1 300)','oklch(70% 0.1 230)'].map((c, i) => ({
+      style: 'width:34px;height:34px;border-radius:50%;background:' + c + ';cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:' + (i === st.diarySwatchIdx ? '0 0 0 2px white inset, 0 0 0 3px ' + c : 'none') + ';outline:' + (i === st.diarySwatchIdx ? '2px solid oklch(30% 0.006 60)' : 'none') + ';outline-offset:3px;',
+      selected: i === st.diarySwatchIdx,
+      select: () => this.setState({ diarySwatchIdx: i }, () => this.persist())
+    }));
+
+    const mapMemory = (m) => ({
+      id: m.id, tag: m.tag, excerpt: m.excerpt, dateLabel: m.dateLabel, duration: m.duration,
+      thumbStyle: 'width:48px;height:48px;border-radius:10px;flex:none;background:' + m.tint + ';position:relative;',
+      isVideo: m.type === 'video',
+      open: () => this.openEntry(m.id)
+    });
+
+    const diaryFilterDefs = [
+      { label: 'All', test: () => true },
+      { label: 'Milestones', test: (m) => m.tag.toLowerCase().includes('milestone') || this.templates.some(t => t.title === m.tag) },
+      { label: 'Video', test: (m) => m.type === 'video' },
+      { label: 'Audio', test: (m) => m.type === 'audio' }
+    ];
+    const diaryFilters = diaryFilterDefs.map((f, i) => ({
+      label: f.label,
+      style: 'flex:none;padding:7px 14px;border-radius:20px;font-size:12.5px;cursor:pointer;background:' + (i === st.diaryFilterIdx ? 'oklch(58% 0.16 300)' : 'oklch(95% 0.005 60)') + ';color:' + (i === st.diaryFilterIdx ? 'white' : 'oklch(35% 0.006 60)'),
+      select: () => this.setDiaryFilter(i)
+    }));
+    const filteredMemories = this.memories.filter(diaryFilterDefs[st.diaryFilterIdx].test);
+
+    const selectedEntry = this.memories.find(m => m.id === st.selectedEntryId) || this.memories[0];
+    const entryIsVideo = selectedEntry.type === 'video';
+    const entryComments = [...selectedEntry.comments, ...(st.extraComments[selectedEntry.id] || [])];
+
+    const mergedTreeNodes = [
+      ...this.treeNodesData.map(n => this.getMergedNode(n.id)),
+      ...st.treeExtra.map(n => this.getMergedNode(n.id))
+    ];
+    const treeNodes = mergedTreeNodes.map(n => ({
+      id: n.id, initial: (n.name[0] || '?').toUpperCase(),
+      style: 'position:absolute;left:' + n.x + ';top:' + n.y + ';width:40px;height:40px;border-radius:50%;background:' + (n.id === 1 ? 'oklch(58% 0.16 300)' : 'white') + ';color:' + (n.id === 1 ? 'white' : 'oklch(30% 0.006 60)') + ';border:2px solid oklch(85% 0.03 300);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transform:translate(-50%,-50%);z-index:2;',
+      select: () => this.openTreeNode(n.id)
+    }));
+    const selectedNode = st.treeEditorNodeId === 'new' ? { name: 'New family member' } : (mergedTreeNodes.find(n => n.id === st.treeEditorNodeId) || { name: 'New family member' });
+
+    const allFamily = [...this.familyMembers, ...st.extraFamilyMembers];
+    const familyMembersVals = allFamily.map(fm => ({
+      id: fm.id, name: fm.name, role: fm.role, initial: fm.initial,
+      toggleStyle: 'width:38px;height:22px;border-radius:11px;position:relative;cursor:pointer;flex:none;background:' + (st.familyToggles[fm.id] ? 'oklch(58% 0.16 300)' : 'oklch(88% 0.006 60)') + ';',
+      knobStyle: 'width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:2px;' + (st.familyToggles[fm.id] ? 'right:2px' : 'left:2px') + ';',
+      toggle: () => this.toggleFamilyMember(fm.id)
+    }));
+
+    const bookCandidates = this.memories.map(m => ({
+      id: m.id, picked: !!st.bookPicked[m.id],
+      thumbStyle: 'width:100%;height:64px;border-radius:8px;background:' + m.tint + ';',
+      pickStyle: 'position:relative;cursor:pointer;border-radius:8px;outline:' + (st.bookPicked[m.id] ? '2px solid oklch(58% 0.16 300)' : '2px solid transparent') + ';',
+      toggle: () => this.toggleBookPick(m.id)
+    }));
+    const bookLayouts = this.bookLayoutsData.map((name, i) => ({
+      name,
+      style: 'display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;border:1.5px solid ' + (i === st.bookLayoutIdx ? 'oklch(58% 0.16 300)' : 'oklch(90% 0.006 60)') + ';cursor:pointer;',
+      previewStyle: 'width:44px;height:56px;border-radius:6px;background:oklch(95% 0.005 60);flex:none;',
+      select: () => this.selectBookLayout(i)
+    }));
+    const bookSelectedCount = Object.values(st.bookPicked).filter(Boolean).length;
+    const bookPreviewTitle = st.bookTitle || (kidName + "'s First Year");
+
+    const rowStyle = (clickable) => 'display:flex;justify-content:space-between;align-items:center;padding:13px 14px;border-bottom:1px solid oklch(93% 0.006 60);' + (clickable ? 'cursor:pointer;' : '');
+    const profileGroups = [
+      { label: 'Family', items: [
+        { label: 'Child profile', value: kidName, rowStyle: rowStyle(false) },
+        { label: 'Shared family space', value: allFamily.length + ' members', action: () => this.navPush('sharedSpace'), rowStyle: rowStyle(true) }
+      ]},
+      { label: 'Dictation', items: [
+        { label: 'Language', value: st.autoDetectLang ? 'Auto-detect (BG, EN…)' : 'Manual', rowStyle: rowStyle(false) },
+        { label: 'Transcript style', value: 'Live + final', rowStyle: rowStyle(false) }
+      ]},
+      { label: 'Privacy & data', items: [
+        { label: 'Data storage region', value: 'EU', rowStyle: rowStyle(false) },
+        { label: 'Export my data', value: 'Download ›', action: () => this.exportData(), rowStyle: rowStyle(true) },
+        { label: 'Delete my data', value: '›', action: () => this.deleteAllData(), rowStyle: rowStyle(true) }
+      ]},
+      { label: 'Account', items: [
+        { label: 'Notifications', value: st.notificationsOn ? 'On' : 'Off', action: () => this.toggleNotifications(), rowStyle: rowStyle(true) },
+        { label: 'Log out', value: '›', action: () => this.logOut(), rowStyle: rowStyle(true) }
+      ]}
+    ];
+
+    const obDots = [0,1,2,3].map(i => ({ style: 'height:4px;flex:1;border-radius:2px;background:' + (i <= st.obStep ? 'oklch(58% 0.16 300)' : 'oklch(90% 0.006 60)') }));
+    const bookDots = [0,1,2,3].map(i => ({ style: 'height:4px;flex:1;border-radius:2px;background:' + (i <= st.bookStep ? 'oklch(58% 0.16 300)' : 'oklch(90% 0.006 60)') }));
+
+    return {
+      showOnboarding: st.mode === 'onboarding',
+      obStep0: st.obStep === 0, obStep1: st.obStep === 1, obStep2: st.obStep === 2, obStep3: st.obStep === 3,
+      obDots, obStepGt0: st.obStep > 0,
+      obNext: () => this.obNext(), obBack: () => this.obBack(), obFinish: () => this.obFinish(),
+      obTouchStart: (e) => this.obTouchStart(e), obTouchEnd: (e) => this.obTouchEnd(e),
+      parentName: st.parentName, setParentName: (e) => this.setField('parentName', e.target.value),
+      parentRole: st.parentRole, setParentRole: (e) => this.setField('parentRole', e.target.value),
+      childName: st.childName, setChildName: (e) => this.setField('childName', e.target.value),
+      childDob: st.childDob, setChildDob: (e) => this.setField('childDob', e.target.value),
+      autoDetectToggleStyle: 'width:42px;height:24px;border-radius:12px;position:relative;flex:none;cursor:pointer;background:' + (st.autoDetectLang ? 'oklch(58% 0.16 300)' : 'oklch(88% 0.006 60)') + ';',
+      autoDetectKnobStyle: 'width:20px;height:20px;border-radius:50%;background:white;position:absolute;top:2px;' + (st.autoDetectLang ? 'right:2px' : 'left:2px') + ';',
+      toggleAutoDetect: () => this.toggleAutoDetect(),
+      promiseOpen: st.promiseOpen, openPromise: () => this.openPromise(), closePromise: () => this.closePromise(),
+      savedToast: st.savedToast,
+      promisePoints: [
+        { icon: '🔐', title: 'Encrypted end to end', body: 'Every recording, photo and transcript is encrypted in transit and at rest — no one at Memma can casually browse your family\'s footage.' },
+        { icon: '🚫', title: 'Never used to train AI', body: 'Your children\'s photos, videos and voices are never used to train any AI model, ours or anyone else\'s.' },
+        { icon: '👪', title: 'Invite-only access', body: 'Only people you explicitly invite to a child\'s diary can ever see it. No public links, no default sharing.' },
+        { icon: '🌍', title: 'Stored in your region', body: 'Data is stored in-region (EU by default) to meet data residency requirements for children\'s data.' },
+        { icon: '🗑️', title: 'Delete or export anytime', body: 'Export everything or permanently delete your family\'s data from settings, no support ticket required.' },
+        { icon: '✅', title: 'Consent for every collaborator', body: 'Grandparents and other collaborators confirm they understand the child-data rules before they can log a memory.' }
+      ],
+      swatches, inputStyle, primaryBtn, primaryBtnSmall, secondaryBtn, secondaryBtnSmall, cardStyle, cardRowStyle, exploreTileStyle, exploreIconBadge, exploreIconBadge1, exploreIconBadge2, exploreIconBadge3, exploreIconBadge4, promptCardStyle, tagChipStyle,
+
+      showApp: st.mode === 'app',
+      showSub: !!top && top !== 'entryDetail',
+      subTitle: top ? subTitles[top] : '',
+      back: () => this.navBack(),
+
+      showHome: st.mode === 'app' && st.stack.length === 0 && st.tab === 'home',
+      showDiary: st.mode === 'app' && st.stack.length === 0 && st.tab === 'diary',
+      showProfile: st.mode === 'app' && st.stack.length === 0 && st.tab === 'profile',
+      showEntryDetail: top === 'entryDetail',
+      showTemplates: top === 'templates',
+      showFamilyTree: top === 'familyTree',
+      showSharedSpace: top === 'sharedSpace',
+      showBook: top === 'book',
+      showTabBar: st.mode === 'app' && st.stack.length === 0 && st.captureStatus === 'closed',
+
+      deviceTitle: st.mode === 'onboarding' ? 'Welcome' : (top ? subTitles[top] : st.tab),
+      greetingName: st.parentName || 'there',
+      activeChild,
+      recentMemories: this.memories.slice(0, 3).map(mapMemory),
+      allMemories: filteredMemories.map(mapMemory),
+      diaryEmpty: filteredMemories.length === 0,
+      diaryFilters,
+      selectedEntry: { ...selectedEntry, fullTranscript: st.transcriptOverrides[selectedEntry.id] || selectedEntry.full, comments: entryComments },
+      entryIsVideo, entryMediaLabel: entryIsVideo ? 'Video · ' + selectedEntry.duration : 'Audio · ' + selectedEntry.duration,
+      entryHeroStyle: 'position:relative;height:200px;border-radius:16px;background:' + selectedEntry.tint + ';margin-top:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;',
+      entryEditingTranscript: st.entryEditingTranscript, entryNotEditing: !st.entryEditingTranscript,
+      entryEditText: st.entryEditText, setEntryEditText: (e) => this.setEntryEditText(e),
+      startEditTranscript: () => this.startEditTranscript(), cancelEditTranscript: () => this.cancelEditTranscript(), saveEditTranscript: () => this.saveEditTranscript(),
+      showAddPhoto: () => this.showAddPhoto(), entryShowPhoto: !!st.entryShowPhotoSlot[selectedEntry.id], entryPhotoId: 'entry-photo-' + selectedEntry.id,
+      newCommentText: st.newCommentText, setNewComment: (e) => this.setNewComment(e), onCommentKeydown: (e) => this.onCommentKeydown(e), postComment: () => this.postComment(),
+
+      templates: this.templates,
+
+      treeNodes, treeEditorOpen: !!st.treeEditorNodeId, selectedNode,
+      editorName: st.editorName, setEditorName: (e) => this.setEditorName(e),
+      editorYear: st.editorYear, setEditorYear: (e) => this.setEditorYear(e),
+      editorRelation: st.editorRelation, setEditorRelation: (e) => this.setEditorRelation(e),
+      closeTreeEditor: () => this.closeTreeEditor(), addTreeNode: () => this.addTreeNode(), saveTreeEditor: () => this.saveTreeEditor(),
+
+      familyMembers: familyMembersVals,
+      inviteOpen: st.inviteOpen, openInvite: () => this.openInvite(), inviteName: st.inviteName, setInviteName: (e) => this.setInviteName(e), onInviteKeydown: (e) => this.onInviteKeydown(e), sendInvite: () => this.sendInvite(),
+
+      bookDots, bookStep0: st.bookStep === 0, bookStep1: st.bookStep === 1, bookStep2: st.bookStep === 2, bookStep3: st.bookStep === 3,
+      bookStepGt0: st.bookStep > 0, bookStepLt3: st.bookStep < 3,
+      bookNext: () => this.bookNext(), bookBack: () => this.bookBack(),
+      bookCandidates, bookLayouts, bookSelectedCount, bookPreviewTitle,
+      bookTitle: st.bookTitle, setBookTitle: (e) => this.setBookTitle(e),
+      bookDedication: st.bookDedication, setBookDedication: (e) => this.setBookDedication(e),
+      exportData: () => this.exportData(), orderPrint: () => this.orderPrint(),
+
+      profileGroups,
+      profileInitial: (st.parentName[0] || 'Y').toUpperCase(),
+      profileName: st.parentName || 'Your name',
+      profileRole: st.parentRole || 'Parent',
+
+      captureOpen: st.captureStatus !== 'closed',
+      captureIdle: st.captureStatus === 'idle',
+      captureActive: st.captureStatus === 'recording' || st.captureStatus === 'paused',
+      captureRecording: st.captureStatus === 'recording',
+      capturePaused: st.captureStatus === 'paused',
+      captureSaved: st.captureStatus === 'saved',
+      captureTimer: this.fmtTime(st.elapsed),
+      transcriptModeLabel: st.transcriptMode === 'live' ? 'Live' : 'Final',
+      toggleTranscriptMode: () => this.toggleTranscriptMode(),
+      waveBars,
+      liveTranscriptText: 'She said "banana" super clearly and pointed right at the fruit bowl — that is a new word!',
+      captureSavedPhotoId: 'capture-photo-' + st.elapsed + '-' + st.captureStatus,
+      captureMode: st.captureMode, isVideoMode: st.captureMode === 'video', isAudioMode: st.captureMode === 'audio',
+      setModeVideo: () => this.setCaptureMode('video'), setModeAudio: () => this.setCaptureMode('audio'),
+      mediaCaptionLabel: (st.captureMode === 'video' ? 'Video' : 'Audio') + ' · ' + this.fmtTime(st.elapsed),
+      modeToggleStyleVideo: 'flex:1;text-align:center;padding:8px 0;border-radius:16px;font-size:12.5px;font-weight:600;cursor:pointer;background:' + (st.captureMode === 'video' ? 'white' : 'transparent') + ';color:' + (st.captureMode === 'video' ? 'oklch(30% 0.006 60)' : 'oklch(55% 0.006 60)') + ';box-shadow:' + (st.captureMode === 'video' ? '0 1px 4px oklch(0% 0 0 / 0.1)' : 'none') + ';',
+      modeToggleStyleAudio: 'flex:1;text-align:center;padding:8px 0;border-radius:16px;font-size:12.5px;font-weight:600;cursor:pointer;background:' + (st.captureMode === 'audio' ? 'white' : 'transparent') + ';color:' + (st.captureMode === 'audio' ? 'oklch(30% 0.006 60)' : 'oklch(55% 0.006 60)') + ';box-shadow:' + (st.captureMode === 'audio' ? '0 1px 4px oklch(0% 0 0 / 0.1)' : 'none') + ';',
+      milestonePickerOpen: st.milestonePickerOpen, toggleMilestonePicker: () => this.toggleMilestonePicker(),
+      taggedMilestone: st.taggedMilestone, milestoneBtnLabel: st.taggedMilestone || 'Tag milestone',
+      milestoneOptions: this.templates.map(t => ({ title: t.title, dot: t.dot, pick: () => this.pickMilestone(t.title) })),
+      genericTagOptions: ['Funny moment', 'Everyday moment', 'Something new'].map(title => ({ title, pick: () => this.pickMilestone(title) })),
+      customTagInput: st.customTagInput, setCustomTagInput: (e) => this.setField('customTagInput', e.target.value),
+      submitCustomTag: () => this.submitCustomTag(),
+      onCustomTagKeydown: (e) => { if (e.key === 'Enter') this.submitCustomTag(); },
+      startCapture: () => this.startCapture(), closeCapture: () => this.closeCapture(),
+      tapRecord: () => this.tapRecord(), tapPause: () => this.tapPause(), tapResume: () => this.tapResume(), tapStop: () => this.tapStop(),
+
+      tabStyle_home: tabBtnStyle(st.tab === 'home' && st.stack.length === 0),
+      tabStyle_diary: tabBtnStyle(st.tab === 'diary' && st.stack.length === 0),
+      tabStyle_family: tabBtnStyle(top === 'familyTree'),
+      tabStyle_profile: tabBtnStyle(st.tab === 'profile' && st.stack.length === 0),
+
+      jumpBtnStyleOnboarding, jumpBtnStyleHome, jumpBtnStyleDiary, jumpBtnStyleCapture, jumpBtnStyleTemplates, jumpBtnStyleFamilyTree, jumpBtnStyleSharedSpace, jumpBtnStyleBook, jumpBtnStyleProfile,
+      jumpOnboarding: () => this.setState({ mode: 'onboarding', obStep: 0 }),
+      jumpHome: () => this.navJump('home'),
+      jumpDiary: () => this.navJump('diary'),
+      jumpProfile: () => this.navJump('profile'),
+      jumpCapture: () => { this.setState({ mode: 'app', tab: 'home', stack: [] }); this.startCapture(); },
+      jumpTemplates: () => { this.setState({ mode: 'app', captureStatus: 'closed' }); this.navPush('templates'); },
+      jumpFamilyTree: () => { this.setState({ mode: 'app', captureStatus: 'closed' }); this.navPush('familyTree'); },
+      jumpSharedSpace: () => { this.setState({ mode: 'app', captureStatus: 'closed' }); this.navPush('sharedSpace'); },
+      jumpBook: () => { this.setState({ mode: 'app', captureStatus: 'closed' }); this.navPush('book'); }
+    };
+  }
+}
+</script>
+</body>
+</html>
